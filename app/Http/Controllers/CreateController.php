@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Item;
 
 class CreateController extends Controller
 {
@@ -20,9 +21,20 @@ class CreateController extends Controller
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
+
      */
     public function index()
     {
-        return view('create');
+        return view('create-album');
+    }
+
+    public function store(Request $request)
+    {
+        $item = new Item;
+        $item->name = $request->input('name');
+        $item->description = $request->input('description');
+        $item->icon = $request->input('icon');
+        $item->save();
+        return redirect()->route('home');
     }
 }

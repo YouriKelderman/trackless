@@ -10,6 +10,12 @@
     <title>Document</title>
 </head>
 <body>
+<?php foreach ($select as $album) {
+    ?>
+<p><?=$album['name']?></p>
+<?php
+}
+?>
 <footer>
     @yield('footer')
 </footer>
