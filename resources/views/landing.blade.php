@@ -16,6 +16,14 @@
 <?php
 }
 ?>
+<?php if(Auth::check()) { ?>
+    <button>You logged in fam</button>
+<?php } else{?>
+<button>Click here to log in!</button>
+<?php }?>
+
+
+
 <footer>
     @yield('footer')
 </footer>

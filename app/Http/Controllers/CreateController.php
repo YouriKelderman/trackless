@@ -28,7 +28,7 @@ class CreateController extends Controller
         return view('create-album');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Item $item)
     {
         $item = new Item;
         $item->name = $request->input('name');
@@ -36,5 +36,6 @@ class CreateController extends Controller
         $item->icon = $request->input('icon');
         $item->save();
         return redirect()->route('home');
+
     }
 }

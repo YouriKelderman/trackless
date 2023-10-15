@@ -13,7 +13,12 @@ class Item extends Model
 
     protected $fillable = [
         'name',
+        'user_id',
         'description',
         'icon'
     ];
+
+public function ratings(){
+    return $this->hasMany(Rating::class);
+}
 }
