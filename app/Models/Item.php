@@ -18,7 +18,13 @@ class Item extends Model
         'icon'
     ];
 
-public function ratings(){
-    return $this->hasMany(Rating::class);
-}
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function albums()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $select = Item::all();
-        return view('landing', compact('select'));
+        $albums = Item::all();
+        return view('landing', compact('albums'));
     }
 }

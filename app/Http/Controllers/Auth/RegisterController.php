@@ -53,6 +53,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required','string', 'max:200','unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'profile_picture' => ['required', 'mimes:jpg,png,jpeg'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -65,10 +66,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $newIconName = time() . '-' . $data['name'] . '.' . $data['profile_picture']->extension();
+
+        $data['profile_picture']->move('profile_pictures', $newIconName);
+
         return User::create([
             'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
+            'profile_picture' => $newIconName,
             'password' => Hash::make($data['password']),
         ]);
     }

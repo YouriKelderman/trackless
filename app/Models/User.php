@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'username',
         'email',
+        'profile_picture',
         'password',
     ];
 
@@ -43,4 +44,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    //define relationship between user and user's albums
+    public function albums()
+    {
+        return $this->hasMany(Item::class);
+    }
+    //define relationship between user and user's reviews
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

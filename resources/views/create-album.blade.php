@@ -1,17 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-@section('create')
+@extends('layouts.app')
+
+@section('content')
+
     <div class="container">
-        <form method="post" action="{{route('item.store')}}">
+
+        <form method="post" action="{{route('item.store')}}" enctype="multipart/form-data">
             {{--name--}}
             {{ csrf_field() }}
             <div class="mb-3">
@@ -31,8 +24,8 @@
             </div>
             {{--description--}}
             <div class="mb-3">
-                <label for="icon" class="form-label">Icon (yass)</label>
-                <input type="text"
+                <label for="icon" class="form-label">Album Cover</label>
+                <input type="file"
                        id="icon"
                        name="icon"
                        class="form-control">
@@ -40,5 +33,5 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
-</body>
-</html>
+
+@endsection
