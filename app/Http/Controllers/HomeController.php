@@ -26,4 +26,9 @@ class HomeController extends Controller
         $albums = Item::all();
         return view('landing', compact('albums'));
     }
+    public function search($searchTag) {
+
+        $albums = Item::where('name', 'LIKE', '%'.$searchTag.'%')->get();
+        return view('landing', compact('albums'));
+    }
 }

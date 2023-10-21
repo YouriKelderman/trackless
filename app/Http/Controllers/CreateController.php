@@ -33,7 +33,7 @@ class CreateController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'icon' => 'required |mimes:jpg,png,jpeg',
+            'icon' => 'required | mimes:jpg,png,jpeg',
 
         ]);
 

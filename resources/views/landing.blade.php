@@ -8,7 +8,7 @@
     <div class="container col-8">
         <div class="container" style="margin-bottom: 10px; margin-left: 0">
             <div class="row" style="margin-left: 0">
-                <form>
+                <form >
                     <div class="input-group" style="width: 300px;">
                         <input class="form-control" type="search" value=""
                                style="background-color: rgba(1,1,1,0); border: 1px solid gray; border-right: none;"

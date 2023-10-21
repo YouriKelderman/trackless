@@ -28,8 +28,8 @@
                     <img
                         src="../img/star.png"
                         style="width:40px; margin-left: -10px;">
-                    <p style="margin-bottom: 0; font-size: 2em; color: white; margin-right: 5px;"><?= round($album->ratings()->avg('rating'), 1) ?></p>
-                    <p style="margin-bottom: 0; color: white; font-style: italic"> 🞄 <?= count($album->ratings) ?> total
+                    <p style="margin-bottom: 0; font-size: 2em; color: white; margin-right: 5px;"><?= round($album->ratings()->where('status', 1)->avg('rating'), 1) ?></p>
+                    <p style="margin-bottom: 0; color: white; font-style: italic"> 🞄 <?= count($album->ratings->where('status', 1)) ?> total
                         reviews</p>
                 </div>
             </div>
@@ -81,7 +81,7 @@
         </form>
     </div>
     <div class="container col-8">
-        @forelse($album->ratings as $review)
+        @forelse($album->ratings->where('status', 1) as $review)
             <div class="container" style=" margin: 10px;">
                 <div class="flex-row d-flex justify-content-between" style=" padding-bottom: 5px; border-bottom: 1px solid gray;">
                     <div class="flex-row d-flex align-items-center">
