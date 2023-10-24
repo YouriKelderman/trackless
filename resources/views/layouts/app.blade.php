@@ -20,8 +20,20 @@
 <style>
     body { background: #1B1A1A !important; }
 
+    .album .albumText{
+        opacity: 0;
+    }
+    .album:hover .albumText{
+        opacity: 1;
+        backdrop-filter: brightness(50%);
+
+    }
+    .albumText{
+        transition: 200ms ease-in-out;
+    }
+
 </style>
-<div id="app">
+<div id="app" style="z-index: 100">
     <nav class="navbar navbar-expand-md navbar-light shadow-sm"
     style="background-color: #252323">
         <div class="container-md col-8">
@@ -92,7 +104,7 @@
         </div>
     </nav>
 
-    <main class="py-4">
+    <main class="">
         @yield('content')
     </main>
 </div>

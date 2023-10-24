@@ -67,14 +67,17 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $newIconName = time() . '-' . $data['name'] . '.' . $data['profile_picture']->extension();
+        $newBannerName = time() . '-' . $data['name'] . '.' . $data['banner']->extension();
 
         $data['profile_picture']->move('profile_pictures', $newIconName);
+        $data['banner']->move('banners', $newBannerName);
 
         return User::create([
             'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
             'profile_picture' => $newIconName,
+            'banner' =>$newBannerName,
             'password' => Hash::make($data['password']),
         ]);
     }

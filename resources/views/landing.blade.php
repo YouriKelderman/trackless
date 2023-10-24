@@ -8,7 +8,7 @@
     <div class="container col-8">
         <div class="container" style="margin-bottom: 10px; margin-left: 0">
             <div class="row" style="margin-left: 0">
-                <form >
+                <form>
                     <div class="input-group" style="width: 300px;">
                         <input class="form-control" type="search" value=""
                                style="background-color: rgba(1,1,1,0); border: 1px solid gray; border-right: none;"
@@ -28,12 +28,23 @@
             </div>
 
         </div>
-        <?php foreach ($albums as $album) { ?>
-        <a href="album/{{$album['id']}}">
+        <div class="container d-flex flex-wrap">
+            <?php foreach ($albums as $album) { ?>
+            <div style="width: 180px; margin: 5px;" class="d-flex flex-column align-items-center">
 
-        <img src="{{ asset('album-covers/' . $album['icon'])}}"
-             style="width: 180px; height: 180px; object-fit: cover; margin: 3px;"></a>
-        <?php } ?>
+                <a href="album/{{$album['id']}}">
+                    <div
+                        class="album"
+                        style="width: 180px; height: 180px; background-image: url('{{asset('album-covers/' . $album['icon'])}}'); background-position:center; background-size: cover;">
+                        <div class="albumText d-flex align-items-center justify-content-center" style="width: 100%; height: 100%;">
+                            <h2 class="text-white" style="text-decoration: none;">Yes</h2>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+            <?php } ?>
+        </div>
 
     </div>
 

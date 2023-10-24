@@ -71,6 +71,18 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                             @enderror
+                            <div class="mb-3">
+                                <label for="banner" class="form-label">account banner</label>
+                                <input type="file"
+                                       id="banner"
+                                       name="banner"
+                                       class="class="form-control @error('banner') is-invalid @enderror"">
+                            </div>
+                            @error('banner')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
                             <div class="row mb-3">
                                 <label for="password"
                                        class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
