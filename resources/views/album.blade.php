@@ -6,74 +6,94 @@
         body {
             background: #1B1A1A !important;
         }
-        main{
+
+        main {
             padding: 0 !important;
         }
 
         /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
     </style>
-<div class="container col-8" style="padding-bottom: 50px;">
-    <img
-        src="{{ asset('banners/' . $poster['banner'])}}"
-        class=""
-        style="width: 100%; height: 140px; object-fit: cover; padding: 0 !important; box-shadow: 0 8px 5px -1px rgba(0,0,0,0.45);; z-index: 2">
-    <div class="d-flex flex-row align-items-center col-8">
+    <section class="container col-8" style="padding-bottom: 50px;">
         <img
-            src="{{ asset('profile_pictures/' . $poster['profile_picture']) }}"
-            class="rounded-circle"
-            style="width: 140px; object-fit: cover; padding: 0 !important; border: 8px solid #1B1A1A; margin-top: -40px;">
-        <div style="margin-top: -25px">
-            <h2 class="text-white" style="margin: 0 !important;" >{{$poster['name']}}</h2>
-            <a style="display: block; color: gray; font-style: italic; margin-top: -4px !important;">&#64;{{ $poster['username'] }}</a>
-        </div>
-    </div>
-</div>
-    <div class="container col-8" style="background-color: #222020; padding-top: 25px; padding-bottom: 20px;">
-        <div class="row"style="margin-left: 25px;">
-
+            src="{{ asset('banners/' . $poster['banner'])}}"
+            class=""
+            style="width: 100%; height: 140px; object-fit: cover; padding: 0 !important; box-shadow: 0 8px 5px -1px rgba(0,0,0,0.45);; z-index: 2">
+        <div class="d-flex flex-row align-items-center col-8" id="details">
             <img
-                src="{{ asset('album-covers/' . $album['icon'])}}"
-                class="shadow"
-                style="width:150px; height: 150px; object-fit: cover; border-radius: 10px; padding: 0 !important;">
-
-            <div
-                class="col-8 d-flex flex-column justify-content-between">
-                <?php if(auth()->user()->id === $poster['id']) {?>
-                <form>
-                <?php } ?>
-
-                <div><?php if(auth()->user()->id === $poster['id'] && $editing) {?>
-                    <input style="background-color: rgba(1,1,1,0); border: 1px solid white; color: white; font-size: 30px; width: fit-content !important;display: inline-block" type="text" id="name" name="text" value="{{$album['name']}}">
-                        <?php } else {?>
-                    <h1 style="margin-bottom: -0.4rem" class="text-white">{{$album['name']}}</h1>
-                       <?php } ?>
-
-                    <p class="fst-italic " style="color: #8C8C8C; font-size: 1.3rem"><?= $poster['name'] ?></p>
-                </div>
-                <div class="d-flex flex-row align-items-center">
-                    <img
-                        src="../img/star.png"
-                        style="width:40px; margin-right: 2px">
-                    <p style="margin-bottom: 0; font-size: 2em; color: white; margin-right: 5px;"><?= round($album->ratings()->where('status', 1)->avg('rating'), 1) ?></p>
-                    <p style="margin-bottom: 0; color: white; font-style: italic"> 🞄 <?= count($album->ratings->where('status', 1)) ?> total
-                        reviews</p>
-                </div>
-                    <?php if(auth()->user()->id === $poster['id']) {?>
-                    </form>
-                <?php } ?>
+                src="{{ asset('profile_pictures/' . $poster['profile_picture']) }}"
+                class="rounded-circle"
+                style="width: 140px; object-fit: cover; padding: 0 !important; border: 8px solid #1B1A1A; margin-top: -40px;">
+            <div style="margin-top: -25px">
+                <h2 class="text-white" style="margin: 0 !important;">{{$poster['name']}}</h2>
+                <a style="display: block; color: gray; font-style: italic; margin-top: -4px !important;">&#64;{{ $poster['username'] }}</a>
             </div>
         </div>
-        <?php if(auth()->user()->id === $poster['id'] && $editing) {?>
-        <textarea style="background-color: rgba(1,1,1,0); margin: 10px 0 0 25px; border: 1px solid white; color: white; width: 95% !important; height: 400px; display: inline-block" type="text" id="name" name="text">{{$album['description']}}</textarea>
-        <?php } else {?>
-        <p class="text-white" style="margin-top:20px; margin-left: 25px">{{$album['description']}}</p>
-        <?php } ?>
-
-    </div>
-    <div class="container col-4" style="background-color: gray; border-radius: 10px;">
-        <form method="post" action="{{route('review.store')}}">
-            {{--review--}}
+    </section>
+    <section class="container col-8" style="background-color: #222020; padding-top: 25px; padding-bottom: 20px;">
+        <?php if ($userId === $poster['id']) { ?>
+        <form method="POST" action="{{route('item.edit')}}">
             {{ csrf_field() }}
+            <?php } ?>
+            <div style="position: absolute; top: 0; right: 0; margin: 10px;">
+
+                <?php if (!$editing && $userId === $poster['id']) { ?>
+                <a href="/album/{{$album['id']}}/edit#details" class="btn btn-primary" style="color: white;">Edit</a>
+                <?php } else if ($userId === $poster['id']){ ?>
+                <a href="/album/{{$album['id']}}#details" class="btn btn-danger">Discard</a>
+                <input type="text" name="item_id" id="item_id" hidden="hidden" value="{{$album['id']}}">
+                <button type="submit" class="btn btn-success">Save</button>
+                <?php } ?>
+
+            </div>
+            <div class="row" style="margin-left: 25px;">
+                <img
+                    src="{{ asset('album-covers/' . $album['icon'])}}"
+                    class="shadow"
+                    style="width:150px; height: 150px; object-fit: cover; border-radius: 10px; padding: 0 !important;">
+
+                <div
+                    class="col-8 d-flex flex-column justify-content-between">
+
+
+                    <div><?php if ($userId === $poster['id'] && $editing) { ?>
+                        <input
+                            style="background-color: rgba(1,1,1,0); border: 1px solid white; color: white; font-size: 30px; width: fit-content !important;display: inline-block"
+                            type="text" id="name" name="name" value="{{$album['name']}}">
+                        <?php } else { ?>
+                        <h1 style="margin-bottom: -0.4rem" class="text-white">{{$album['name']}}</h1>
+                        <?php } ?>
+
+                        <p class="fst-italic " style="color: #8C8C8C; font-size: 1.3rem"><?= $poster['name'] ?></p>
+                    </div>
+                    <div class="d-flex flex-row align-items-center">
+                        <img
+                            src="/img/star.png"
+                            style="width:40px; margin-right: 2px">
+                        <p style="margin-bottom: 0; font-size: 2em; color: white; margin-right: 5px;"><?= round($album->ratings()->where('status', 1)->avg('rating'), 1) ?></p>
+                        <p style="margin-bottom: 0; color: white; font-style: italic">
+                            🞄 <?= count($album->ratings->where('status', 1)) ?> total
+                            reviews</p>
+                    </div>
+                </div>
+            </div>
+            <?php if ($userId === $poster['id'] && $editing) { ?>
+            <textarea
+                style="background-color: rgba(1,1,1,0); margin: 10px 0 0 25px; border: 1px solid white; color: white; width: 95% !important; height: 400px; display: inline-block"
+                type="text" id="description" name="description">{{$album['description']}}</textarea>
+            <?php } else { ?>
+            <p class="text-white" style="margin-top:20px; margin-left: 25px">{{$album['description']}}</p>
+            <?php } ?>
+            <?php if ($userId === $poster['id']) { ?>
+        </form>
+        <?php } ?>
+    </section>
+    <div class="container col-4" style="background-color: gray; border-radius: 10px;">
+        <?php if ($loggedIn){ ?>
+        <form method="post" action="{{route('review.store')}}">
+            <?php } ?>
+            {{ csrf_field() }}
+
+            {{--review--}}
             <div class="mb-3">
                 <label for="review" class="form-label">Review</label>
                 <input type="text"
@@ -117,7 +137,8 @@
     <div class="container col-8">
         @forelse($album->ratings->where('status', 1) as $review)
             <div class="container" style=" margin: 10px;">
-                <div class="flex-row d-flex justify-content-between" style=" padding-bottom: 5px; border-bottom: 1px solid gray;">
+                <div class="flex-row d-flex justify-content-between"
+                     style=" padding-bottom: 5px; border-bottom: 1px solid gray;">
                     <div class="flex-row d-flex align-items-center">
                         <img
                             src="{{ asset('profile_pictures/' . $review->poster->profile_picture) }}"
@@ -126,9 +147,11 @@
                         <p style="margin: 0;" class="text-white">{{$review->poster->name}}</p>
                     </div>
                     <div class="flex-row d-flex align-items-center">
-                            <?php for($i=0 ; $i < $review['rating']; $i++)  { ?>
+                            <?php for ($i = 0;
+                                       $i < $review['rating'];
+                                       $i++)  { ?>
                         <img
-                            src="../img/star.png"
+                            src="/img/star.png"
                             style="width:30px; height:30px; margin: 0 1px">
                         <?php } ?>
                     </div>

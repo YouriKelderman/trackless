@@ -51,4 +51,22 @@ class CreateController extends Controller
         return redirect()->route('home');
 
     }
+
+    public function edit(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'item_id' =>'required'
+        ]);
+
+
+        $item = Item::find($request['item_id']);
+
+        $item->name = $request['name'];
+        $item->description = $request['description'];
+
+        $item->save();
+        return redirect()->to('album/'.$request['item_id']);
+
+    }
 }

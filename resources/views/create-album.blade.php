@@ -2,8 +2,9 @@
 
 @section('content')
 
-    <div class="container col-4">
+    <div class="container col-8" style="margin-top: 50px;">
 
+<?php if(count(auth()->user()->ratings) >= 5) {?>
         <form method="post" action="{{route('item.store')}}" enctype="multipart/form-data">
             {{--name--}}
             {{ csrf_field() }}
@@ -32,6 +33,12 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+        <?php } else { ?>
+        <h1 class="text-white">You do not have enough reviews to create an Album.</h1>
+        <h2 class="text-white">Please ensure that you have 5 or more total reviews.</h2>
+        <h3 class="text-white">{{count(auth()->user()->ratings)}}/5 total reviews</h3>
+        <?php }?>
+
     </div>
 
 @endsection
