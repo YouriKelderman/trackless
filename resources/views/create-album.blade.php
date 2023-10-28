@@ -18,10 +18,10 @@
             {{--description--}}
             <div class="mb-3">
                 <label for="description" class="form-label text-white">Description</label>
-                <input type="text"
+                <textarea type="text"
                        id="description"
                        name="description"
-                       class="form-control">
+                          class="form-control"></textarea>
             </div>
             {{--icon--}}
             <div class="mb-3">

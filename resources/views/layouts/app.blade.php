@@ -41,6 +41,7 @@
             <a class="navbar-brand text-white" href="{{ url('/home') }}">
                 {{ config('MelodyMuse', 'MelodyMuse') }}
             </a>
+            <a href="{{route('create')}}" class="text-white" style="text-decoration: none;"><p style="margin: 0; font-size: 1em">🞄 Create</p></a>
             <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -69,7 +70,9 @@
                             </li>
                         @endif
                     @else
+
                         <a href="{{route('profile')}}">
+
                         <img
                             src="{{ asset('profile_pictures/' . Auth::user()->profile_picture) }}"
                             class="nav-item rounded-circle shadow-4"

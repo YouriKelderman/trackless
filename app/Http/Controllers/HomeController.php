@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+
 class HomeController extends Controller
 {
     /**
@@ -26,9 +27,20 @@ class HomeController extends Controller
         $albums = Item::all();
         return view('landing', compact('albums'));
     }
-    public function search($searchTag) {
 
-        $albums = Item::where('name', 'LIKE', '%'.$searchTag.'%')->get();
+    public function search(Request $request)
+    {
+        $request->validate([
+           'search' => "required",
+           'filter'=>"required"
+        ]);
+        $query = $request['search'];
+        if ($request['filter'] === "1") {
+            $albums = Item::where('name', 'LIKE', '%' . $query . '%')->get()->sortBy('name');
+        } else {
+            $albums = Item::where('name', 'LIKE', '%' . $query . '%')->get()->sortByDesc('name');
+        }
         return view('landing', compact('albums'));
     }
+
 }

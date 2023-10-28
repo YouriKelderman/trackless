@@ -30,15 +30,25 @@
         </div>
     </section>
     <section class="container col-8" style="background-color: #222020; padding-top: 25px; padding-bottom: 20px;">
+        <div class="d-flex flex-row" style="position: absolute; top: 0; right: 0; margin: 10px;">
+            <?php if (($admin || $userId === $poster['id']) && !$editing) { ?>
+            <form method="POST" action="{{route('item.delete')}}">
+                @csrf
+                <input type="number" name="item_id" id="item_id" hidden="hidden" value="{{$album['id']}}">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+                <?php if (!$editing && $userId === $poster['id']) { ?>
+            <a href="/album/{{$album['id']}}/edit#details" class="btn btn-primary" style="color: white;">Edit</a>
+            <?php } ?>
+            <?php } ?>
+        </div>
         <?php if ($userId === $poster['id']) { ?>
         <form method="POST" action="{{route('item.edit')}}">
             {{ csrf_field() }}
             <?php } ?>
             <div style="position: absolute; top: 0; right: 0; margin: 10px;">
 
-                <?php if (!$editing && $userId === $poster['id']) { ?>
-                <a href="/album/{{$album['id']}}/edit#details" class="btn btn-primary" style="color: white;">Edit</a>
-                <?php } else if ($userId === $poster['id']){ ?>
+                <?php if ($userId === $poster['id'] && $editing){ ?>
                 <a href="/album/{{$album['id']}}#details" class="btn btn-danger">Discard</a>
                 <input type="text" name="item_id" id="item_id" hidden="hidden" value="{{$album['id']}}">
                 <button type="submit" class="btn btn-success">Save</button>
@@ -54,24 +64,29 @@
                 <div
                     class="col-8 d-flex flex-column justify-content-between">
 
-
-                    <div><?php if ($userId === $poster['id'] && $editing) { ?>
+                    <div><?php if ($editing && $userId === $poster['id']) { ?>
                         <input
                             style="background-color: rgba(1,1,1,0); border: 1px solid white; color: white; font-size: 30px; width: fit-content !important;display: inline-block"
-                            type="text" id="name" name="name" value="{{$album['name']}}">
-                        <?php } else { ?>
+                            type="text" id="name" name="name" value="{{$album['name']}}"
+                            class="form-control @error('name') is-invalid @enderror">
+                        @error('name')
+                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                        @enderror
+                            <?php } else { ?>
                         <h1 style="margin-bottom: -0.4rem" class="text-white">{{$album['name']}}</h1>
                         <?php } ?>
 
-                        <p class="fst-italic " style="color: #8C8C8C; font-size: 1.3rem"><?= $poster['name'] ?></p>
+                        <p class="fst-italic " style="color: #8C8C8C; font-size: 1.3rem">{{ $poster['name'] }}</p>
                     </div>
                     <div class="d-flex flex-row align-items-center">
                         <img
                             src="/img/star.png"
                             style="width:40px; margin-right: 2px">
-                        <p style="margin-bottom: 0; font-size: 2em; color: white; margin-right: 5px;"><?= round($album->ratings()->where('status', 1)->avg('rating'), 1) ?></p>
+                        <p style="margin-bottom: 0; font-size: 2em; color: white; margin-right: 5px;">{{ round($album->ratings()->where('status', 1)->avg('rating'), 1) }}</p>
                         <p style="margin-bottom: 0; color: white; font-style: italic">
-                            🞄 <?= count($album->ratings->where('status', 1)) ?> total
+                            🞄 {{count($album->ratings->where('status', 1)) }} total
                             reviews</p>
                     </div>
                 </div>
@@ -79,8 +94,14 @@
             <?php if ($userId === $poster['id'] && $editing) { ?>
             <textarea
                 style="background-color: rgba(1,1,1,0); margin: 10px 0 0 25px; border: 1px solid white; color: white; width: 95% !important; height: 400px; display: inline-block"
-                type="text" id="description" name="description">{{$album['description']}}</textarea>
-            <?php } else { ?>
+                type="text" id="description" name="description"
+                class="form-control @error('description') is-invalid @enderror">{{$album['description']}}</textarea>
+            @error('description')
+            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+            @enderror
+                <?php } else { ?>
             <p class="text-white" style="margin-top:20px; margin-left: 25px">{{$album['description']}}</p>
             <?php } ?>
             <?php if ($userId === $poster['id']) { ?>
@@ -91,7 +112,7 @@
         <?php if ($loggedIn){ ?>
         <form method="post" action="{{route('review.store')}}">
             <?php } ?>
-            {{ csrf_field() }}
+            @csrf
 
             {{--review--}}
             <div class="mb-3">
@@ -99,7 +120,14 @@
                 <input type="text"
                        id="review"
                        name="review"
-                       class="form-control">
+                       class="form-control @error('review') is-invalid @enderror"
+                       required="required"
+                       value="{{old('review')}}">
+                @error('review')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
             </div>
             {{--rating--}}
             <div class="mb-3">
@@ -107,24 +135,33 @@
                 <input type="number"
                        id="rating"
                        name="rating"
-                       class="form-control">
+                       class="form-control @error('rating') is-invalid @enderror"
+                       required="required"
+                       value="{{old('rating')}}">
+                @error('rating')
+                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                @enderror
             </div>
             <input type="number"
                    id="user_id"
                    name="user_id"
                    hidden="hidden"
-                   value="<?=$userId?>">
+                   value="{{$userId}}"
+                   required="required">
             <input type="number"
                    id="item_id"
                    name="item_id"
                    hidden="hidden"
-                   value="<?=$album->id?>">
+                   value="{{$album->id}}">
             <input type="number"
                    name="status"
                    id="status"
                    value="1"
-                   hidden="hidden">
-            <?php if ($loggedIn === true) { ?>
+                   hidden="hidden"
+                   required="required">
+                <?php if ($loggedIn === true) { ?>
             <button type="submit" class="btn btn-primary">Submit</button>
             <?php } else { ?>
             <button type="" class="btn btn-primary">
@@ -160,9 +197,9 @@
             </div>
 
         @empty
-            <p>You don't have any active reviews</p>
+            <p class="text-white">You don't have any active reviews</p>
         @endforelse
-        {{$rating}}
+
 
     </div>
 @endsection

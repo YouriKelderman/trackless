@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\User;
+use App\Models\Rating;
 
 class CreateController extends Controller
 {
@@ -46,17 +48,19 @@ class CreateController extends Controller
         $item->name = $request->input('name');
         $item->description = $request->input('description');
         $item->user_id = auth()->user()->id;
+
         $item->icon = $newIconName;
         $item->save();
         return redirect()->route('home');
 
     }
 
-    public function edit(Request $request){
+    public function edit(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'item_id' =>'required'
+            'item_id' => 'required'
         ]);
 
 
@@ -66,7 +70,33 @@ class CreateController extends Controller
         $item->description = $request['description'];
 
         $item->save();
-        return redirect()->to('album/'.$request['item_id']);
+        return redirect()->to('album/' . $request['item_id']);
 
+    }
+
+    public function delete(Request $request)
+    {
+        $item = Item::find($request['item_id']);
+        foreach ($item->ratings as $review) {
+            $review->delete();
+        }
+        $item->delete();
+        return redirect()->to('home');
+    }
+
+    public function deleteUser(Request $request)
+    {
+
+        $user = User::find($request->id);
+        $user->ratings()->delete();
+
+        if(is_array($user->albums())){
+            foreach ($user->albums() as $album){
+                $album->ratings()->delete();
+            }
+        }
+        $user->albums()->delete();
+        $user->delete();
+        return redirect()->to('profile');
     }
 }
